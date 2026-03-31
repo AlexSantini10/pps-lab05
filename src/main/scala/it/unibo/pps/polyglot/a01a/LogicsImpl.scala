@@ -1,7 +1,6 @@
 package it.unibo.pps.polyglot.a01a
 
 import it.unibo.pps.polyglot.a01a.Logics
-import it.unibo.pps.polyglot.a01a.Logics.Result
 import it.unibo.pps.util.Sequences.Sequence
 import scala.util.Random
 

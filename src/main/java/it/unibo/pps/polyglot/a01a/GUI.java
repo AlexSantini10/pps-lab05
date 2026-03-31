@@ -23,11 +23,11 @@ public class GUI extends JFrame {
             final JButton bt = (JButton)e.getSource();
             final Pair<Integer,Integer> p = buttons.get(bt);
             //System.out.println("hit "+p);
-            final Logics.Result result = logics.hit(p.getY(), p.getX());
-            final boolean isHit = result == Logics.Result.HIT || result == Logics.Result.WON;
+            final Result result = logics.hit(p.getY(), p.getX());
+            final boolean isHit = result == Result.HIT || result == Result.WON;
             bt.setText(isHit ? "X" : "O");
             bt.setEnabled(false);
-            if (result==Logics.Result.WON || result==Logics.Result.LOST){
+            if (result==Result.WON || result==Result.LOST){
                 System.out.println(result.name());
                 System.exit(0);
             }
