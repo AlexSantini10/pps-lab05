@@ -146,7 +146,7 @@ object OnlineCoursePlatform:
      * @param courseId The ID to check.
      * @return true if the course exists, false otherwise.
      */
-    override def isCourseAvailable(courseId: String): Boolean = !courses.exists(c => c.courseId == courseId)
+    override def isCourseAvailable(courseId: String): Boolean = courses.exists(c => c.courseId == courseId)
 
     /**
      * Enrolls a student in a specific course.
@@ -208,6 +208,22 @@ object OnlineCoursePlatform:
         case None => false
 
 
+object sameCategory:
+
+  def unapply(courses: Sequence[Course]): Option[String] =
+    courses match
+      case Sequence.Nil() => None
+      case Cons(first, rest) =>
+        val cat = first.category
+        if allSame(rest, cat) then Some(cat) else None
+
+  private def allSame(courses: Sequence[Course], cat: String): Boolean =
+    @tailrec
+    def allSameHelper(seq: Sequence[Course]): Boolean = seq match
+      case Sequence.Nil() => true
+      case Cons(h, t) if h.category == cat => allSameHelper(t)
+      case _ => false
+    allSameHelper(courses)
 /**
  * Represents an online learning platform that offers courses and manages student enrollments.
  * Hints:
@@ -262,4 +278,25 @@ object OnlineCoursePlatform:
   platform.removeCourse(pythonCourse)
   println(s"Is PYTHON01 available? ${platform.isCourseAvailable(pythonCourse.courseId)}") // false
   println(s"Programming courses: ${platform.findCoursesByCategory("Programming")}") // Sequence(scalaCourse)
+
+  // Test sameCategory pattern
+  println("\n--- Testing sameCategory pattern ---")
+  val programmingCourses = platform.findCoursesByCategory("Programming")
+  val designCourses = platform.findCoursesByCategory("Design")
+
+  programmingCourses match
+    case sameCategory(cat) => println(s"All programming courses are in category: $cat")
+    case _ => println("Not all programming courses are in the same category")
+
+  designCourses match
+    case sameCategory(cat) => println(s"All design courses are in category: $cat")
+    case _ => println("Not all design courses are in the same category")
+
+  // Test negativo: sequenza mista con corsi di categorie diverse
+  val mixedCourses = Sequence(scalaCourse, designCourse)
+  println(s"\nMixed courses: $mixedCourses")
+  mixedCourses match
+    case sameCategory(cat) => println(s"All mixed courses are in category: $cat")
+    case _ => println("Mixed courses are NOT all in the same category (expected)")
+
 
