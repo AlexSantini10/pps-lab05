@@ -24,12 +24,13 @@ public class GUI extends JFrame {
             final Pair<Integer,Integer> p = buttons.get(bt);
             //System.out.println("hit "+p);
             final Logics.Result result = logics.hit(p.getY(), p.getX());
+            final boolean isHit = result == Logics.Result.HIT || result == Logics.Result.WON;
+            bt.setText(isHit ? "X" : "O");
+            bt.setEnabled(false);
             if (result==Logics.Result.WON || result==Logics.Result.LOST){
                 System.out.println(result.name());
                 System.exit(0);
             }
-            bt.setText(result == Logics.Result.HIT ? "X" : "O");
-            bt.setEnabled(false);
         };
 
         for (int i=0; i<size; i++){
